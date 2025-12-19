@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentine Cho Em</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Font chữ Pixel dễ thương -->
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div id="game-container">
+        
+        <!-- Màn hình 1: Intro -->
+        <div id="intro-screen" class="screen">
+            <div class="start-btn-container">
+                <!-- Hình hộp quà đóng vai trò nút Start -->
+                <img src="assets/gift-box-closed.png" id="start-btn" alt="Open Gift">
+                <p class="blink">Nhấn để mở quà</p>
+            </div>
+        </div>
+
+        <!-- Màn hình 2: Bàn học (Desk) -->
+        <div id="desk-screen" class="screen hidden">
+            <!-- Background bàn học -->
+            <div class="desk-items">
+                <!-- Hộp quà đã mở (nếu không nằm trong background) -->
+                <!-- Các món đồ trong hộp -->
+                
+                <div class="item" id="item-flower" data-label="Ngắm hoa">
+                    <img src="assets/flower.png" alt="Flower">
+                </div>
+
+                <div class="item" id="item-letter" data-label="Đọc thư">
+                    <img src="assets/letter.png" alt="Letter">
+                </div>
+
+                <div class="item" id="item-cassette" data-label="Nghe băng">
+                    <img src="assets/cassette.png" alt="Cassette">
+                </div>
+
+                <div class="item" id="item-photos" data-label="Xem ảnh">
+                    <img src="assets/photo-icon.png" alt="Photos">
+                </div>
+            </div>
+            
+            <!-- Hiển thị label khi hover -->
+            <div id="hover-label"></div>
+        </div>
+
+        <!-- Các Modal (Cửa sổ bật lên) -->
+        <div id="modal-overlay" class="hidden">
+            
+            <!-- Modal: Ảnh -->
+            <div id="modal-photos" class="modal-content hidden">
+                <div class="photo-frame">
+                    <img id="current-photo" src="" alt="Memory">
+                </div>
+                <p class="instruction">Dùng phím mũi tên ⬅️ ➡️ để chuyển ảnh</p>
+            </div>
+
+            <!-- Modal: Cassette -->
+            <div id="modal-cassette" class="modal-content hidden">
+                <img src="assets/cassette.png" class="spinning-cassette" alt="Cassette Playing">
+                <p>Đang phát: Lời nhắn gửi em...</p>
+                <audio id="audio-player" src="assets/audio-msg.mp3"></audio>
+            </div>
+
+            <!-- Modal: Thư -->
+            <div id="modal-letter" class="modal-content hidden">
+                <img src="assets/letter-content.png" alt="Letter Content" class="letter-img">
+            </div>
+
+            <!-- Modal: Hoa -->
+            <div id="modal-flower" class="modal-content hidden">
+                <img src="assets/flower.png" class="flower-zoom" alt="Flower Zoom">
+                <p>Tặng em đóa hoa tươi thắm nhất! 🌹</p>
+            </div>
+
+             <!-- Modal: Calendar (Hiện ra cuối cùng) -->
+             <div id="modal-calendar" class="modal-content hidden">
+                <h2>Hẹn hò nhé?</h2>
+                <p>Em đã xem hết món quà rồi. Tụi mình đi chơi nhé?</p>
+                <input type="date" id="date-picker" value="2026-02-14">
+                <button id="confirm-date">Chốt đơn! ❤️</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
