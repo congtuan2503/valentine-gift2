@@ -3,109 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Valentine's Day</title>
+    <title>Gửi Người Tôi Yêu</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Font Pixel dễ thương -->
-    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <!-- Font Pixel cực đẹp -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
-
-    <div id="game-container">
-        <!-- MÀN HÌNH INTRO -->
-        <div id="intro-screen">
-            <div class="intro-content">
-                <h1>Valentine's Day 2026</h1>
-                <p>Press Start to Begin</p>
-                <!-- Nút Start giả lập hộp quà đóng hoặc nút bấm -->
-                <button id="start-btn">START</button>
+    <div class="game-container">
+        <!-- Màn hình Intro -->
+        <div id="intro-scene" class="scene active">
+            <img src="assets/intro-bg.png" class="bg-img">
+            <div class="start-btn-container">
+                <button id="start-btn">BẮT ĐẦU</button>
             </div>
         </div>
 
-        <!-- MÀN HÌNH BÀN HỌC (GAMEPLAY) -->
-        <div id="desk-screen" class="hidden">
-            <!-- Nền bàn học -->
-            <div class="desk-background"></div>
+        <!-- Màn hình Bàn học -->
+        <div id="desk-scene" class="scene">
+            <img src="assets/desk-bg.png" class="bg-img">
             
-            <!-- Hộp quà mở (Container chứa các vật phẩm) -->
-            <div id="gift-box-area">
-                <!-- Các vật phẩm bên trong -->
-                
-                <!-- 1. Bông hoa -->
-                <div class="item" id="item-flower" data-tooltip="Ngắm hoa">
-                    <img src="assets/flower.png" alt="Flower">
-                </div>
-
-                <!-- 2. Lá thư -->
-                <div class="item" id="item-letter" data-tooltip="Đọc thư">
-                    <img src="assets/letter.png" alt="Letter">
-                </div>
-
-                <!-- 3. Băng Cassette -->
-                <div class="item" id="item-cassette" data-tooltip="Nghe đoạn băng">
-                    <img src="assets/cassette.png" alt="Cassette">
-                </div>
-
-                <!-- 4. Ảnh kỷ niệm -->
-                <div class="item" id="item-photo" data-tooltip="Xem ảnh">
-                    <img src="assets/photo-icon.png" alt="Photos">
-                </div>
+            <!-- Hộp quà -->
+            <div id="gift-container" class="item">
+                <img src="assets/gift-box-closed.png" id="gift-box" class="pixel-art">
+                <p id="gift-hint">Mở quà</p>
             </div>
 
-            <!-- Tooltip hiển thị khi hover -->
-            <div id="tooltip" class="hidden"></div>
-        </div>
-
-        <!-- OVERLAY (Lớp phủ mờ khi xem vật phẩm) -->
-        <div id="overlay" class="hidden">
-            <!-- Nút đóng (vùng bấm ra ngoài cũng đóng, nhưng thêm nút X cho dễ hiểu) -->
-            <div id="close-area"></div>
-
-            <!-- CONTENT: HOA -->
-            <div id="modal-flower" class="modal-content hidden">
-                <img src="assets/flower.png" class="center-img zoom-in">
-                <p class="caption">Em xinh đẹp như đóa hoa này vậy! 🌹</p>
-            </div>
-
-            <!-- CONTENT: THƯ -->
-            <div id="modal-letter" class="modal-content hidden">
-                <img src="assets/letter-content.png" class="paper-letter">
-            </div>
-
-            <!-- CONTENT: CASSETTE -->
-            <div id="modal-cassette" class="modal-content hidden">
-                <img src="assets/cassette.png" class="center-img spinning">
-                <div class="audio-controls">
-                    <p>Đang phát: Lời nhắn gửi yêu thương...</p>
-                    <audio id="audio-player" controls>
-                        <source src="assets/audio-msg.mp3" type="audio/mpeg">
-                        Trình duyệt không hỗ trợ nghe nhạc.
-                    </audio>
+            <!-- Các vật phẩm bên trong (ẩn lúc đầu) -->
+            <div id="items-in-box" class="hidden">
+                <div class="interactable" id="flower-item" data-text="Ngắm hoa">
+                    <img src="assets/flower.png" class="pixel-art">
                 </div>
-            </div>
-
-            <!-- CONTENT: PHOTO GALLERY -->
-            <div id="modal-gallery" class="modal-content hidden">
-                <div class="gallery-container">
-                    <button id="prev-btn" class="nav-btn">❮</button>
-                    <img id="gallery-img" src="" alt="Memory">
-                    <button id="next-btn" class="nav-btn">❯</button>
+                <div class="interactable" id="letter-item" data-text="Đọc thư">
+                    <img src="assets/letter.png" class="pixel-art">
                 </div>
-            </div>
-
-            <!-- CONTENT: CALENDAR (Hiện ra cuối cùng) -->
-            <div id="modal-calendar" class="modal-content hidden">
-                <div class="calendar-paper">
-                    <h2>Lên lịch hẹn hò nhé!</h2>
-                    <p>Anh muốn mời em đi chơi vào ngày này:</p>
-                    <input type="date" id="date-picker" value="2026-02-14">
-                    <button id="confirm-date">Chốt đơn! ❤️</button>
+                <div class="interactable" id="cassette-item" data-text="Nghe đoạn băng">
+                    <img src="assets/cassette.png" class="pixel-art">
+                </div>
+                <div class="interactable" id="photo-item" data-text="Xem ảnh">
+                    <img src="assets/photo-icon.png" class="pixel-art">
                 </div>
             </div>
         </div>
 
-        <!-- Nhạc nền click (tùy chọn) -->
-        <audio id="click-sound" src="assets/click-sound.mp3"></audio>
+        <!-- Lớp phủ Modal để xem nội dung -->
+        <div id="modal-overlay" class="modal hidden">
+            <div class="modal-content">
+                <div id="photo-viewer" class="content-piece hidden">
+                    <img id="current-photo" src="">
+                    <div class="nav-btns">Dùng phím ← → để chuyển ảnh</div>
+                </div>
+                <div id="letter-viewer" class="content-piece hidden">
+                    <img src="assets/letter-content.png" class="letter-img">
+                </div>
+                <div id="audio-viewer" class="content-piece hidden">
+                    <div class="cassette-spinning">
+                        <img src="assets/cassette.png" class="pixel-art">
+                    </div>
+                    <p>Đang phát bản ghi âm...</p>
+                </div>
+                <div id="calendar-viewer" class="content-piece hidden">
+                    <h2>Hẹn hò thôi! ❤️</h2>
+                    <p>Kỉ niệm 11/08/2025 - Valentine 14/02/2026</p>
+                    <input type="date" id="date-picker">
+                    <button id="confirm-date">Xác nhận lịch hẹn</button>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <audio id="bg-music" loop src="assets/audio-msg.mp3"></audio>
+    <audio id="click-sfx" src="assets/click-sound.mp3"></audio>
 
     <script src="script.js"></script>
 </body>
