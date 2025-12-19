@@ -1,25 +1,34 @@
+/* --- CẤU HÌNH CHUNG --- */
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+* {
+    box-sizing: border-box;
+}
+
 body {
-    background-color: #222;
+    background-color: #222; /* Màu nền web bên ngoài game */
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
-    font-family: 'VT323', monospace;
-    overflow: hidden;
+    padding: 0;
+    font-family: 'VT323', monospace; /* Font chữ pixel */
+    overflow: hidden; /* Không cho cuộn trang */
 }
 
-/* Khung game 16:9 */
+/* --- KHUNG GAME 16:9 --- */
 #game-container {
     width: 100%;
-    max-width: 1280px;
-    aspect-ratio: 16/9;
+    max-width: 1280px; /* Giới hạn chiều rộng để ảnh không bị vỡ quá */
+    aspect-ratio: 16/9; /* Tỉ lệ chuẩn 16:9 */
     position: relative;
     background-color: #000;
-    overflow: hidden;
-    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    box-shadow: 0 0 30px rgba(0,0,0,0.8); /* Đổ bóng khung game cho đẹp */
+    overflow: hidden; /* Những gì thừa ra sẽ bị cắt bỏ */
 }
 
+/* --- CÁC MÀN HÌNH (SCREENS) --- */
 .screen {
     width: 100%;
     height: 100%;
@@ -28,12 +37,11 @@ body {
     left: 0;
     background-size: cover;
     background-position: center;
-    /* Giữ ảnh sắc nét kiểu pixel art */
-    image-rendering: pixelated; 
+    image-rendering: pixelated; /* Giữ độ sắc nét cho pixel art */
     transition: opacity 1s ease-in-out, transform 1s ease-in-out;
 }
 
-/* Backgrounds */
+/* Màn hình Intro */
 #intro-screen {
     background-image: url('assets/intro-bg.png');
     z-index: 2;
@@ -42,82 +50,133 @@ body {
     align-items: center;
 }
 
+/* Màn hình Bàn học */
 #desk-screen {
-    background-image: url('assets/desk-bg.png'); /* Ảnh bàn có hộp quà đã mở sẵn nắp */
+    background-image: url('assets/desk-bg.png');
     z-index: 1;
 }
 
+/* Class ẩn dùng chung */
 .hidden {
     display: none !important;
     opacity: 0;
     pointer-events: none;
 }
 
-/* Hiệu ứng chuyển cảnh Morph */
+/* Hiệu ứng mờ dần khi chuyển cảnh */
 .fade-out {
     opacity: 0;
     transform: scale(1.1); /* Zoom nhẹ khi biến mất */
 }
 
-/* Nút Start (Hộp quà) */
+/* --- NÚT START (HỘP QUÀ ĐẦU TIÊN) --- */
 .start-btn-container {
     text-align: center;
     cursor: pointer;
     color: white;
-    font-size: 24px;
+    font-size: 28px;
+    text-shadow: 2px 2px 0px #000; /* Viền chữ đen */
 }
 
 #start-btn {
-    width: 150px;
+    width: 120px; /* Kích thước hộp quà ban đầu */
     transition: transform 0.2s;
 }
+
 #start-btn:hover {
-    transform: scale(1.1) rotate(5deg);
+    transform: scale(1.1) rotate(5deg); /* Lắc nhẹ khi hover */
 }
+
 .blink {
     animation: blinker 1.5s linear infinite;
+    margin-top: 10px;
 }
+
 @keyframes blinker {
     50% { opacity: 0; }
 }
 
-/* Các vật phẩm trên bàn */
+/* --- VẬT PHẨM TRÊN BÀN (ITEMS) --- */
+.desk-items {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none; /* Để click xuyên qua vùng trống */
+}
+
 .item {
     position: absolute;
     cursor: pointer;
-    transition: transform 0.2s;
+    transition: transform 0.2s, filter 0.2s;
+    pointer-events: auto; /* Bật lại click cho vật phẩm */
+    
+    /* MẶC ĐỊNH KÍCH THƯỚC NHỎ ĐỂ KHÔNG BỊ TRÀN */
+    width: 70px; 
+    height: auto;
+    object-fit: contain;
 }
+
 .item:hover {
-    transform: translateY(-5px);
-    filter: drop-shadow(0 0 5px white);
+    transform: scale(1.2) translateY(-5px); /* Phóng to và bay lên nhẹ */
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.8)); /* Phát sáng viền trắng */
+    z-index: 10;
 }
 
-/* Vị trí các vật phẩm (Bạn CẦN chỉnh lại top/left cho khớp với ảnh bàn học của bạn) */
-#item-flower { top: 40%; left: 30%; width: 80px; }
-#item-letter { top: 60%; left: 50%; width: 60px; }
-#item-cassette { top: 50%; left: 60%; width: 70px; }
-#item-photos { top: 45%; left: 45%; width: 60px; }
+/* --- VỊ TRÍ CỤ THỂ (ĐÃ THU GỌN VÀO GIỮA) --- */
+/* Bạn chỉnh % để di chuyển: Tăng Top -> xuống dưới, Tăng Left -> sang phải */
 
-/* Label khi hover */
+/* Hoa: Nằm hơi cao và bên trái trung tâm */
+#item-flower {
+    top: 40%; 
+    left: 45%;
+    width: 80px; /* Hoa cho to hơn xíu */
+}
+
+/* Thư: Nằm ngay giữa */
+#item-letter {
+    top: 48%;
+    left: 50%;
+    width: 60px;
+}
+
+/* Cassette: Nằm hơi thấp bên trái */
+#item-cassette {
+    top: 52%;
+    left: 42%;
+    width: 75px;
+}
+
+/* Ảnh: Nằm hơi thấp bên phải */
+#item-photos {
+    top: 52%;
+    left: 55%;
+    width: 55px;
+}
+
+/* --- TEXT HIỂN THỊ KHI HOVER --- */
 #hover-label {
     position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    color: white;
-    font-size: 30px;
-    text-shadow: 2px 2px 0px #000;
+    bottom: 15%; /* Nằm ở phía dưới màn hình */
+    width: 100%;
+    text-align: center;
+    color: #fff;
+    font-size: 32px;
+    font-weight: bold;
+    text-shadow: 2px 2px 0px #000, 0 0 10px rgba(255,192,203, 0.5); /* Chữ có viền và bóng hồng */
     pointer-events: none;
+    z-index: 5;
 }
 
-/* Modal Overlay & Blur */
+/* --- MODAL (CỬA SỔ BẬT LÊN) --- */
 #modal-overlay {
     position: absolute;
     top: 0; left: 0;
     width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(8px); /* Hiệu ứng làm mờ background xịn xò */
-    z-index: 10;
+    background: rgba(0, 0, 0, 0.5); /* Nền đen mờ */
+    backdrop-filter: blur(8px); /* HIỆU ỨNG BLUR BACKGROUND XỊN */
+    z-index: 100;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -127,28 +186,98 @@ body {
 .modal-content {
     text-align: center;
     color: white;
-    max-width: 80%;
-    max-height: 80%;
+    max-width: 90%;
+    max-height: 90%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
-/* Photo Gallery Styles */
-.photo-frame img {
-    max-height: 60vh;
-    border: 5px solid white;
-    box-shadow: 0 0 15px rgba(0,0,0,0.5);
+/* Ảnh trong modal (dùng chung cho thư, hoa, ảnh kỷ niệm) */
+.modal-content img {
+    max-width: 100%;
+    max-height: 70vh; /* Không cao quá 70% màn hình */
+    border: 4px solid #fff;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    border-radius: 4px;
 }
-.instruction { margin-top: 10px; font-size: 20px; }
 
-/* Cassette Styles */
-.spinning-cassette {
-    width: 200px;
-    animation: spin 3s linear infinite;
-}
-@keyframes spin { 100% { transform: rotate(360deg); } }
-
-/* Letter Styles */
+/* Riêng cho thư thì bỏ border cho thật hơn (tuỳ bạn chọn) */
 .letter-img {
-    max-height: 70vh;
-    background: white;
-    padding: 10px;
+    background: transparent;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* Riêng cho ảnh kỷ niệm */
+.photo-frame img {
+    object-fit: contain;
+}
+
+.instruction {
+    margin-top: 15px;
+    font-size: 22px;
+    background: rgba(0,0,0,0.5);
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+/* --- HIỆU ỨNG CASSETTE --- */
+.spinning-cassette {
+    width: 200px !important; /* To hơn khi xem chi tiết */
+    height: auto;
+    border: none !important;
+    box-shadow: none !important;
+    animation: spin 4s linear infinite;
+}
+
+@keyframes spin {
+    100% { transform: rotate(360deg); }
+}
+
+/* --- LỊCH (CALENDAR) --- */
+#modal-calendar {
+    background: rgba(255, 255, 255, 0.95);
+    color: #333;
+    padding: 30px;
+    border-radius: 10px;
+    border: 4px solid #ff6b6b;
+    box-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
+}
+
+#modal-calendar h2 {
+    margin-top: 0;
+    color: #d63031;
+    font-size: 36px;
+}
+
+#modal-calendar p {
+    font-size: 24px;
+}
+
+#date-picker {
+    font-family: 'VT323', monospace;
+    font-size: 24px;
+    padding: 5px;
+    margin: 15px 0;
+    border: 2px solid #333;
+}
+
+#confirm-date {
+    display: block;
+    margin: 10px auto 0;
+    font-family: 'VT323', monospace;
+    font-size: 24px;
+    padding: 10px 20px;
+    background: #ff6b6b;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+#confirm-date:hover {
+    background: #ee5253;
 }
