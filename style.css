@@ -1,77 +1,273 @@
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { 
-    background: #222; 
-    display: flex; justify-content: center; align-items: center; 
-    height: 100vh; overflow: hidden;
+/* Import font Pixel chuyên dụng */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+/* Cấu hình cơ bản */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #1a1a1a; /* Nền tối để nổi bật game */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
     font-family: 'Press Start 2P', cursive;
-}
-
-.game-container {
-    width: 90vw;
-    aspect-ratio: 16 / 9;
-    max-width: 1200px;
-    position: relative;
-    border: 4px solid #fff;
     overflow: hidden;
-    box-shadow: 0 0 20px rgba(0,0,0,0.5);
 }
 
+/* Container chính tỉ lệ 16:9 */
+.game-container {
+    position: relative;
+    width: 95vw;
+    max-width: 1200px;
+    aspect-ratio: 16 / 9;
+    background-color: #000;
+    border: 6px solid #fff;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+    overflow: hidden;
+}
+
+/* Các màn hình (Scenes) */
 .scene {
-    position: absolute; width: 100%; height: 100%;
-    transition: opacity 1.5s ease-in-out, filter 1.5s ease;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
     display: none;
+    transition: opacity 1.5s ease-in-out, filter 1s ease;
 }
-.scene.active { display: block; }
 
-.bg-img { width: 100%; height: 100%; object-fit: cover; image-rendering: pixelated; }
-
-/* Hiệu ứng rung cho hộp quà */
-@keyframes shake {
-    0% { transform: translate(1px, 1px) rotate(0deg); }
-    10% { transform: translate(-1px, -2px) rotate(-1deg); }
-    30% { transform: translate(3px, 2px) rotate(0deg); }
-    50% { transform: translate(-1px, 2px) rotate(1deg); }
-    100% { transform: translate(1px, 1px) rotate(0deg); }
+.scene.active {
+    display: block;
+    opacity: 1;
 }
-.shake { animation: shake 0.5s infinite; }
 
-.pixel-art { image-rendering: pixelated; }
+/* Ảnh nền */
+.bg-img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    image-rendering: pixelated; /* Giữ nét pixel */
+    z-index: 1;
+}
 
-/* Vật phẩm trên bàn */
+/* Màn hình Intro & Nút Bắt đầu */
+.start-btn-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    text-align: center;
+}
+
+#start-btn {
+    padding: 20px 40px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 18px;
+    color: white;
+    background-color: #ff4d6d;
+    border: 4px solid #fff;
+    cursor: pointer;
+    box-shadow: 6px 6px 0px #800e26;
+    transition: all 0.2s;
+}
+
+#start-btn:hover {
+    background-color: #ff758f;
+    transform: scale(1.1);
+    box-shadow: 4px 4px 0px #800e26;
+}
+
+/* Hộp quà trên bàn học */
 #gift-container {
-    position: absolute; bottom: 20%; left: 50%; transform: translateX(-50%);
-    cursor: pointer; text-align: center; color: white; font-size: 10px;
+    position: absolute;
+    bottom: 15%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 5;
+    cursor: pointer;
+    text-align: center;
 }
 
+#gift-box {
+    width: 120px;
+    image-rendering: pixelated;
+    transition: transform 0.3s;
+}
+
+#gift-hint {
+    color: white;
+    font-size: 10px;
+    margin-top: 10px;
+    text-shadow: 2px 2px #000;
+}
+
+/* Các vật phẩm sau khi mở quà */
 #items-in-box {
-    position: absolute; width: 100%; height: 100%;
-    display: flex; justify-content: space-around; align-items: center;
-    padding-top: 100px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 6;
+    pointer-events: none; /* Chỉ cho phép tương tác với các item con */
 }
 
 .interactable {
-    position: relative; cursor: pointer; transition: transform 0.2s;
+    position: absolute;
+    cursor: pointer;
+    pointer-events: auto;
+    transition: transform 0.3s ease;
 }
-.interactable:hover { transform: scale(1.1); }
-.interactable:hover::after {
+
+.interactable img {
+    width: 80px;
+    image-rendering: pixelated;
+}
+
+/* Vị trí các vật phẩm trên bàn (Bạn có thể chỉnh lại cho khớp với ảnh bàn học của bạn) */
+#flower-item { bottom: 25%; left: 20%; }
+#letter-item { bottom: 30%; left: 40%; }
+#cassette-item { bottom: 25%; right: 25%; }
+#photo-item { bottom: 35%; right: 15%; }
+
+/* Hiệu ứng Hover hiện chữ */
+.interactable:hover {
+    transform: scale(1.2) translateY(-10px);
+}
+
+.interactable::after {
     content: attr(data-text);
-    position: absolute; top: -30px; left: 50%; transform: translateX(-50%);
-    background: white; color: black; padding: 5px; font-size: 8px; width: max-content;
+    position: absolute;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    color: black;
+    padding: 5px 10px;
+    font-size: 10px;
+    white-space: nowrap;
+    border: 2px solid black;
+    opacity: 0;
+    transition: opacity 0.3s;
 }
 
-/* Modal Blur */
+.interactable:hover::after {
+    opacity: 1;
+}
+
+/* Lớp phủ Modal khi xem chi tiết */
 .modal {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.4); backdrop-filter: blur(8px);
-    z-index: 100; display: flex; justify-content: center; align-items: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(10px); /* Hiệu ứng Blur xung quanh */
+    -webkit-backdrop-filter: blur(10px);
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.5s ease;
 }
-.hidden { display: none !important; }
 
-.content-piece img { max-height: 70vh; border: 5px solid white; }
-.cassette-spinning img { animation: rotate 2s linear infinite; }
-@keyframes rotate { from {transform: rotate(0deg);} to {transform: rotate(360deg);} }
+.hidden {
+    display: none !important;
+}
 
-#start-btn {
-    padding: 15px 30px; font-family: 'Press Start 2P'; cursor: pointer;
-    background: #ff4d6d; color: white; border: none; border-radius: 5px;
+/* Nội dung bên trong Modal */
+.content-piece {
+    text-align: center;
+    color: white;
+    animation: zoomIn 0.5s ease;
+}
+
+@keyframes zoomIn {
+    from { transform: scale(0.5); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.content-piece img {
+    max-height: 75vh;
+    max-width: 80vw;
+    border: 8px solid white;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+/* Băng Cassette xoay tròn khi phát nhạc */
+.cassette-spinning img {
+    width: 200px;
+    border: none;
+    animation: rotate 4s linear infinite;
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Hiệu ứng rung hộp quà */
+.shake {
+    animation: shakeAnim 0.5s infinite;
+}
+
+@keyframes shakeAnim {
+    0% { transform: translate(1px, 1px) rotate(0deg); }
+    20% { transform: translate(-3px, 0px) rotate(-1deg); }
+    40% { transform: translate(3px, 2px) rotate(1deg); }
+    60% { transform: translate(-1px, -1px) rotate(0deg); }
+    80% { transform: translate(3px, 1px) rotate(-1deg); }
+    100% { transform: translate(1px, -2px) rotate(1deg); }
+}
+
+/* Giao diện Lịch (Calendar) */
+#calendar-viewer {
+    background: white;
+    color: black;
+    padding: 30px;
+    border: 4px solid #ff4d6d;
+}
+
+#calendar-viewer h2 {
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+#date-picker {
+    padding: 10px;
+    font-family: 'Press Start 2P';
+    font-size: 12px;
+    margin-bottom: 20px;
+    border: 2px solid black;
+}
+
+#confirm-date {
+    display: block;
+    margin: 0 auto;
+    padding: 10px 20px;
+    background: #ff4d6d;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-family: 'Press Start 2P';
+    font-size: 10px;
+}
+
+/* Nút điều hướng ảnh */
+.nav-btns {
+    margin-top: 15px;
+    font-size: 10px;
+    background: rgba(255,255,255,0.2);
+    padding: 10px;
+    border-radius: 5px;
 }
